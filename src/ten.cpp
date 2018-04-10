@@ -33,18 +33,9 @@
  * This tutorial demonstrates simple receipt of messages over the ROS system.
  */
 // %Tag(CALLBACK)%
-
-ros::Publisher filtered_pub; 
-
 void chatterCallback(const std_msgs::String::ConstPtr& msg)
 {
-  static int counter = 0;
-  counter++;
-  if (counter == 10) {
-      ROS_INFO("I heard: [%s]", msg->data.c_str());
-      counter = 0;
-      filtered_pub.publish(msg);
-  }
+  ROS_INFO("I heard: [%s]", msg->data.c_str());
 }
 // %EndTag(CALLBACK)%
 
@@ -60,7 +51,7 @@ int main(int argc, char **argv)
    * You must call one of the versions of ros::init() before using any other
    * part of the ROS system.
    */
-  ros::init(argc, argv, "listener");
+  ros::init(argc, argv, "ten");
 
   /**
    * NodeHandle is the main access point to communications with the ROS system.
@@ -85,10 +76,8 @@ int main(int argc, char **argv)
    * away the oldest ones.
    */
 // %Tag(SUBSCRIBER)%
-  ros::Subscriber sub = n.subscribe("chatter", 1000, chatterCallback);
+  ros::Subscriber sub = n.subscribe("filtered", 1000, chatterCallback);
 // %EndTag(SUBSCRIBER)%
-
-  filtered_pub = n.advertise<std_msgs::String>("filtered", 1000);
 
   /**
    * ros::spin() will enter a loop, pumping callbacks.  With this version, all
